@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>3D로 보는 성경</title>
+<meta name="description" content="성경의 장소와 이야기를 3D로 걸어 보는 장유중앙교회 교육용 모형 모음">
+<meta property="og:title" content="3D로 보는 성경">
+<meta property="og:description" content="예루살렘 성, 솔로몬 성전, 성막, 방주, 바울의 선교 여행까지 — 말씀의 자리를 3D로 걸어 봅니다.">
+<meta property="og:image" content="thumbs/temple.jpg">
+<link rel="icon" href="icons/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#13221f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="3D 성경">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#13221f;--bg2:#0f1b19;--panel:#182a28;--panel2:#1f3331;--line:#33474a;--line-soft:#2a3d3c;
+  --muted:#a1b3ae;--text:#f3f0e6;--gold:#e5b96f;--gold-deep:#9d7f52;--ink:#14221f;
+  --serif:"Noto Serif KR",Georgia,serif;
+  --r:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text)}
+body{font:16px/1.7 "Pretendard","Noto Sans KR",system-ui,-apple-system,sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:8px 14px;transition:border-color .15s,background .15s,color .15s}
+button:hover{border-color:var(--gold);background:#2a3c39}
+button:focus-visible,a:focus-visible,input:focus-visible,.card:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+a{color:var(--gold)}
+img{display:block;max-width:100%}
+.serif{font-family:var(--serif)}
+.eyebrow{color:var(--gold);font-size:11px;letter-spacing:2.4px;font-weight:700;text-transform:uppercase}
+.wrap{max-width:1240px;margin:0 auto;padding:0 30px}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:30;height:84px;border-bottom:1px solid var(--line);background:#13221fef;backdrop-filter:blur(8px)}
+header .wrap{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none;font-size:21px;font-weight:700;line-height:1.25}
+.brand small{display:block;font-size:10px;letter-spacing:3px;color:var(--muted);font-weight:600;margin-top:5px}
+.brandmark{width:42px;height:44px;border:1px solid var(--gold-deep);display:grid;place-items:center;color:var(--gold);font:600 17px/1 Georgia,serif;letter-spacing:1px}
+.headerActions{display:flex;gap:6px;align-items:center}
+.quiet{border-color:transparent;background:transparent;color:var(--muted);font-size:14px;text-decoration:none;padding:8px 12px;border-radius:8px}
+.quiet:hover{color:var(--text);background:#ffffff0a}
+.outlineGold{border-color:var(--gold-deep);color:var(--gold);background:transparent;font-size:14px;font-weight:600}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 34px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 380px at 78% 20%,#e5b96f14,transparent 70%),radial-gradient(700px 300px at 10% 100%,#7fc4a40d,transparent 70%);pointer-events:none}
+.heroGrid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center}
+.hero h1{font:600 46px/1.28 var(--serif);letter-spacing:-1.2px;margin:12px 0 16px}
+.hero h1 em{font-style:normal;color:var(--gold)}
+.hero p.lead{color:#cfdad5;font-size:17px;margin:0 0 26px;max-width:30em}
+.stats{display:flex;gap:28px;margin:0;padding:18px 0 0;border-top:1px solid var(--line-soft);max-width:420px}
+.stats div{display:flex;flex-direction:column}
+.stats b{font:600 30px/1.1 var(--serif);color:var(--gold)}
+.stats span{font-size:12px;color:var(--muted);letter-spacing:.5px;margin-top:4px}
+.featured{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10;cursor:pointer;background:var(--panel);box-shadow:0 30px 60px -30px #000c}
+.featured img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.featured:hover img{transform:scale(1.03)}
+.featured .fInfo{position:absolute;left:0;right:0;bottom:0;padding:60px 22px 18px;background:linear-gradient(#0f1b1900,#0f1b19ee);display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.featured .fInfo h3{margin:4px 0 0;font:600 24px/1.3 var(--serif)}
+.featured .fInfo .tagNew{font-size:11px;letter-spacing:2px;color:var(--gold);font-weight:700}
+.featured .fBtn{flex:none;background:var(--gold);color:var(--ink);border:0;font-weight:700;font-size:14px;padding:10px 16px}
+.featured .fBtn:hover{background:#f0cb8a}
+.featured .back{position:absolute;inset:0;transform:translate(6%,-8%) scale(.9);opacity:.35;filter:blur(1px);z-index:-1}
+
+/* ---------- toolbar ---------- */
+.toolbar{position:sticky;top:84px;z-index:20;background:#13221fef;backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft);padding:14px 0}
+.toolbar .wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.seg{display:flex;gap:2px;padding:4px;border:1px solid #4d5f59;border-radius:10px;background:#12201e}
+.seg button{border-color:transparent;background:transparent;font-size:14px;padding:6px 14px}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--ink);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.chips button{font-size:13px;padding:5px 12px;border-radius:999px}
+.chips button[aria-pressed="true"]{color:var(--ink);background:var(--gold);border-color:var(--gold);font-weight:600}
+.chips button .n{opacity:.6;margin-left:4px;font-size:12px}
+.search{position:relative}
+.search input{font:inherit;font-size:14px;color:var(--text);background:#12201e;border:1px solid var(--line);border-radius:8px;padding:7px 12px 7px 34px;width:220px}
+.search input::placeholder{color:#7d918b}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);opacity:.6}
+
+/* ---------- gallery ---------- */
+section.list{padding:32px 0 70px;min-height:50vh}
+.sectionHead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:12px}
+.sectionHead h2{margin:0;font:600 24px/1.3 var(--serif)}
+.sectionHead .count{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px}
+.card{position:relative;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r);background:var(--panel);overflow:hidden;cursor:pointer;transition:transform .2s ease,border-color .2s,box-shadow .2s;text-align:left;padding:0}
+.card:hover{transform:translateY(-3px);border-color:var(--gold-deep);box-shadow:0 18px 40px -22px #000;background:var(--panel)}
+.thumb{position:relative;aspect-ratio:16/10;background:#1d302d;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.card:hover .thumb img{transform:scale(1.05)}
+.card.soon .thumb img{filter:saturate(.85)}
+.thumb .ph{position:absolute;inset:0;display:grid;place-items:center;color:#5d726c;font:600 13px/1 var(--serif);letter-spacing:2px}
+.badge{position:absolute;left:12px;top:12px;font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 10px;border-radius:999px;background:var(--gold);color:var(--ink)}
+.badge.soon{background:#14221fd8;color:#d7cdb8;border:1px solid #5b6a58;font-weight:600}
+.num{position:absolute;right:12px;top:10px;font:italic 600 20px/1 var(--serif);color:#f3f0e6cc;text-shadow:0 1px 6px #0009}
+.sketchNote{position:absolute;right:10px;bottom:8px;font-size:10px;letter-spacing:1px;color:#c7d3cdb3}
+.cardBody{padding:16px 18px 18px;display:flex;flex-direction:column;gap:4px;flex:1}
+.era{font-size:12px;color:var(--gold);letter-spacing:.5px;font-weight:600}
+.cardBody h3{margin:0;font:600 20px/1.35 var(--serif)}
+.cardBody .en{font-size:10px;letter-spacing:2.5px;color:var(--muted);font-weight:600}
+.cardBody .ref{font-size:13px;color:#b9c7c2;margin-top:6px;line-height:1.55}
+.cardFoot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px;font-size:12px;color:var(--muted)}
+.cardFoot .go{color:var(--gold);font-weight:600;font-size:13px}
+.tag{display:inline-block;padding:1px 9px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:#c1cfca}
+.addCard{border:1px dashed #4a5d5a;border-radius:var(--r);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;color:var(--muted);min-height:260px;text-align:center;padding:24px;font-size:14px}
+.addCard b{color:#d6dfdb;font:600 17px/1.4 var(--serif)}
+.addCard .plus{width:44px;height:44px;border:1px solid #4a5d5a;border-radius:50%;display:grid;place-items:center;font-size:22px;color:var(--gold)}
+.empty{padding:60px 0;text-align:center;color:var(--muted)}
+
+/* ---------- timeline ---------- */
+.timeline{position:relative;padding-left:0}
+.tlRow{display:grid;grid-template-columns:150px 28px minmax(0,1fr);gap:0 16px;align-items:stretch}
+.tlWhen{text-align:right;padding-top:26px}
+.tlWhen b{display:block;font:600 16px/1.35 var(--serif);color:var(--text)}
+.tlWhen span{font-size:12px;color:var(--muted)}
+.tlLine{position:relative}
+.tlLine::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);transform:translateX(-50%)}
+.tlRow:first-child .tlLine::before{top:34px}
+.tlRow:last-child .tlLine::before{bottom:calc(100% - 34px)}
+.tlDot{position:absolute;left:50%;top:28px;width:14px;height:14px;border-radius:50%;transform:translateX(-50%);background:var(--bg);border:2px solid var(--gold)}
+.tlDot.live{background:var(--gold);box-shadow:0 0 0 5px #e5b96f26}
+.tlCard{display:grid;grid-template-columns:200px minmax(0,1fr);gap:0;margin:10px 0;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--panel);cursor:pointer;text-align:left;padding:0;transition:border-color .2s,transform .2s}
+.tlCard:hover{border-color:var(--gold-deep);transform:translateX(3px);background:var(--panel)}
+.tlCard .thumb{aspect-ratio:auto;min-height:120px}
+.tlCard .cardBody{padding:14px 18px}
+.tlTestament{display:flex;align-items:center;gap:12px;margin:26px 0 8px 166px;color:var(--muted);font-size:12px;letter-spacing:2px}
+.tlTestament::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+
+/* ---------- about ---------- */
+.about{border-top:1px solid var(--line);padding:56px 0 30px;background:var(--bg2)}
+.aboutGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.aboutGrid h4{margin:6px 0 8px;font:600 18px/1.4 var(--serif)}
+.aboutGrid p{margin:0;color:#c3d0cb;font-size:14px}
+footer{background:var(--bg2);color:var(--muted);font-size:13px;padding:24px 0 40px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding-top:20px}
+
+/* ---------- preview drawer ---------- */
+.scrim{position:fixed;inset:0;background:#06100ecc;backdrop-filter:blur(3px);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;z-index:60;top:0;right:0;bottom:0;width:min(760px,94vw);background:var(--bg);border-left:1px solid var(--line);display:flex;flex-direction:column;transform:translateX(102%);transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:-30px 0 60px -20px #000a}
+.drawer.open{transform:none}
+.dTop{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line);gap:10px}
+.dTop .nav{display:flex;gap:6px}
+.dTop button{padding:6px 12px;font-size:14px}
+.iconBtn{width:38px;height:38px;padding:0;display:grid;place-items:center}
+.dScroll{flex:1;overflow:auto;overscroll-behavior:contain}
+.stage{position:relative;aspect-ratio:16/10;background:#1d302d;overflow:hidden;border-bottom:1px solid var(--line)}
+.stage img,.stage iframe,.stage .teaserHost{position:absolute;inset:0;width:100%;height:100%;border:0}
+.stage img{object-fit:cover}
+.stage iframe{opacity:0;transition:opacity .4s;background:#13221f}
+.stage iframe.ready{opacity:1}
+.stage .teaserHost{cursor:grab}
+.stage .teaserHost:active{cursor:grabbing}
+.stageBar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;pointer-events:none}
+.stageBar>*{pointer-events:auto}
+.pill{font-size:12px;padding:4px 11px;border-radius:999px;background:#12201ee8;border:1px solid #4d5f59;color:#dfe7e1}
+.stageBar button{font-size:13px;background:#12201ee8;border-color:#4d5f59;backdrop-filter:blur(4px)}
+.stageBar button[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.loading{position:absolute;inset:0;display:none;place-items:center;font-size:13px;color:#dfe7e1;background:#0f1b1988}
+.loading.show{display:grid}
+.dBody{padding:24px 26px 30px}
+.dBody h2{margin:8px 0 2px;font:600 30px/1.3 var(--serif);letter-spacing:-.5px}
+.dBody .en{font-size:11px;letter-spacing:3px;color:var(--muted);font-weight:600}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 18px}
+.dBody p.sum{margin:0 0 18px;color:#dbe3df}
+.verse{border-left:3px solid var(--gold);background:var(--panel2);border-radius:0 8px 8px 0;padding:12px 16px;margin:0 0 22px;font-size:15px}
+.verse small{display:block;color:var(--gold);font-size:11px;letter-spacing:2px;font-weight:700;margin-bottom:2px}
+.dBody h4{margin:0 0 10px;color:var(--gold);font-size:14px;letter-spacing:.5px}
+.points{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.points li{font-size:13px;padding:4px 11px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:#dfe7e1}
+.points li i{font-style:normal;color:var(--gold);margin-right:5px;font-size:11px}
+.dFoot{display:flex;gap:10px;padding:16px 22px calc(16px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg)}
+.primary{flex:1;background:var(--gold);color:var(--ink);border:0;font-weight:700;font-size:16px;padding:13px 18px;border-radius:10px;display:flex;justify-content:center;align-items:center;gap:8px;text-decoration:none}
+.primary:hover{background:#f0cb8a;color:var(--ink)}
+.primary[aria-disabled="true"]{background:#2a3c39;color:#9fb0aa;cursor:default;border:1px dashed #4d5f59}
+.dFoot .iconBtn{width:auto;padding:0 16px;border-radius:10px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#f3f0e6;color:var(--ink);padding:10px 18px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:80;max-width:calc(100vw - 32px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- responsive ---------- */
+@media (max-width:960px){
+  .heroGrid{grid-template-columns:1fr;gap:30px}
+  .hero h1{font-size:38px}
+  .aboutGrid{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  .wrap{padding:0 16px}
+  header{height:66px}
+  .toolbar{top:66px}
+  .brand{font-size:18px;gap:10px}
+  .brand small{letter-spacing:2px}
+  .brandmark{width:36px;height:38px;font-size:15px}
+  .headerActions .hideM{display:none}
+  .hero{padding:30px 0 24px}
+  .hero h1{font-size:31px}
+  .hero p.lead{font-size:15px}
+  .stats{gap:22px}
+  .stats b{font-size:24px}
+  .toolbar .wrap{gap:10px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;order:3;flex-basis:100%;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none}
+  .search{flex:1}
+  .search input{width:100%}
+  .grid{grid-template-columns:1fr;gap:16px}
+  .tlRow{grid-template-columns:22px minmax(0,1fr);gap:0 12px}
+  .tlWhen{display:none}
+  .tlTestament{margin-left:34px}
+  .tlCard{grid-template-columns:120px minmax(0,1fr)}
+  .tlCard .thumb{min-height:110px}
+  .tlCard .cardBody h3{font-size:17px}
+  .tlCard .ref{display:none}
+  .tlCard .mWhen{display:block}
+  .drawer{top:auto;left:0;width:100%;height:94dvh;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(102%)}
+  .dTop{padding:12px 16px}
+  .dBody{padding:20px 18px 26px}
+  .dBody h2{font-size:25px}
+  .dFoot{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}
+}
+.mWhen{display:none;font-size:12px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="./" aria-label="3D로 보는 성경 처음으로">
+      <span class="brandmark" aria-hidden="true">3D</span>
+      <span>3D로 보는 성경<small>BIBLE IN 3D · 장유중앙교회</small></span>
+    </a>
+    <div class="headerActions">
+      <button class="outlineGold" id="installBtn" type="button">앱으로 받기</button>
+      <a class="quiet hideM" href="#about">이용 안내</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap heroGrid">
+    <div>
+      <div class="eyebrow">Walk through the Scriptures</div>
+      <h1>말씀이 펼쳐진 자리를<br><em>3D로</em> 걸어 봅니다</h1>
+      <p class="lead">성막과 성전, 예루살렘 성과 갈릴리 마을, 바울이 걸었던 길까지. 성경 본문과 연구를 바탕으로 복원한 공간을 한곳에 모았습니다. 공간은 계속 더해집니다.</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div id="featured"></div>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="보기 방식">
+      <button type="button" data-view="grid" aria-pressed="true">갤러리</button>
+      <button type="button" data-view="timeline" aria-pressed="false">시대순</button>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="분류"></div>
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="공간·본문 검색" aria-label="공간 검색">
+    </label>
+  </div>
+</div>
+
+<section class="list">
+  <div class="wrap">
+    <div class="sectionHead"><h2 id="listTitle">모든 공간</h2><span class="count" id="count"></span></div>
+    <div id="view"></div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="wrap">
+    <div class="aboutGrid">
+      <div>
+        <div class="eyebrow">01 · 둘러보기</div>
+        <h4>카드를 누르면 미리보기</h4>
+        <p>각 공간을 누르면 미리보기 창이 열립니다. 열린 공간은 ‘실시간 미리보기’로 실제 화면을 바로 만져 볼 수 있고, ‘공간으로 들어가기’를 누르면 전체 화면으로 열립니다.</p>
+      </div>
+      <div>
+        <div class="eyebrow">02 · 시대순 보기</div>
+        <h4>성경의 흐름을 따라</h4>
+        <p>‘시대순’을 누르면 방주에서 성막, 성전, 예수님 시대, 사도 시대로 이어지는 흐름 위에 공간이 놓입니다. 설교·구역 모임·교육 시간에 순서대로 보여 주기 좋습니다.</p>
+      </div>
+      <div>
+        <div class="eyebrow">03 · 앱으로 받기</div>
+        <h4>휴대폰 홈 화면에</h4>
+        <p>‘앱으로 받기’를 누르거나, 아이폰은 사파리의 공유 버튼 → ‘홈 화면에 추가’를 누르면 앱처럼 설치됩니다. 준비 중인 공간이 열리면 자동으로 목록에 나타납니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <span>3D로 보는 성경 · 장유중앙교회</span>
+    <span>모형은 성경 본문과 연구를 바탕으로 한 교육용 복원이며, 세부는 해석에 따라 다를 수 있습니다.</span>
+  </div>
+</footer>
+
+<!-- 미리보기 창 -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dTitle" aria-hidden="true">
+  <div class="dTop">
+    <span class="eyebrow" id="dIndex"></span>
+    <div class="nav">
+      <button type="button" class="iconBtn" id="dPrev" aria-label="이전 공간">←</button>
+      <button type="button" class="iconBtn" id="dNext" aria-label="다음 공간">→</button>
+      <button type="button" class="iconBtn" id="dClose" aria-label="닫기">✕</button>
+    </div>
+  </div>
+  <div class="dScroll">
+    <div class="stage" id="stage"></div>
+    <div class="dBody" id="dBody"></div>
+  </div>
+  <div class="dFoot" id="dFoot"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="apps.js"></script>
+<script src="teasers.js"></script>
+<script>
+(function(){
+  const APPS = (window.BIBLE3D_APPS || []).map((a, i) => Object.assign({ no: String(i + 1).padStart(2, '0') }, a));
+  const CATS = window.BIBLE3D_CATEGORIES || [{ id: 'all', label: '전체' }];
+  const catLabel = (id) => (CATS.find(c => c.id === id) || {}).label || '';
+  const $ = (s, el = document) => el.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const isLive = (a) => a.status === 'live';
+
+  const state = { view: 'grid', cat: 'all', q: '' };
+  try { const v = localStorage.getItem('b3d.view'); if (v === 'grid' || v === 'timeline') state.view = v; } catch (e) {}
+
+  /* ---------- 썸네일 ---------- */
+  function thumbSrc(a) {
+    if (a.thumb) return a.thumb;
+    if (a.teaser && window.Bible3DTeasers) { try { return window.Bible3DTeasers.snapshot(a.teaser); } catch (e) {} }
+    return null;
+  }
+  function thumbHTML(a, opts = {}) {
+    const src = thumbSrc(a);
+    return `<div class="thumb">
+      ${src ? `<img src="${esc(src)}" alt="${esc(a.title)} 미리보기" loading="lazy">` : `<div class="ph">${esc(a.en || '')}</div>`}
+      ${opts.badge !== false ? `<span class="badge ${isLive(a) ? '' : 'soon'}">${isLive(a) ? '열림' : '준비 중'}</span>` : ''}
+      ${opts.num !== false ? `<span class="num">${a.no}</span>` : ''}
+      ${!isLive(a) && a.teaser ? '<span class="sketchNote">구상 스케치</span>' : ''}
+    </div>`;
+  }
+
+  /* ---------- 상단 통계 · 대표 공간 ---------- */
+  function renderHero() {
+    const live = APPS.filter(isLive).length, soon = APPS.length - live;
+    $('#stats').innerHTML = `<div><b>${live}</b><span>열린 공간</span></div><div><b>${soon}</b><span>준비 중</span></div><div><b>${APPS.length}</b><span>전체</span></div>`;
+    const lives = APPS.filter(isLive);
+    const f = lives[lives.length - 1];
+    if (!f) return;
+    $('#featured').innerHTML = `<div class="featured" role="button" tabindex="0" data-id="${f.id}" aria-label="${esc(f.title)} 미리보기">
+      <img src="${esc(f.thumb)}" alt="">
+      <div class="fInfo"><div><span class="tagNew">최근 열린 공간 · ${esc(f.era.year)}</span><h3>${esc(f.title)}</h3></div>
+      <button class="fBtn" type="button" tabindex="-1">미리보기</button></div></div>`;
+  }
+
+  /* ---------- 분류 칩 ---------- */
+  function renderChips() {
+    $('#chips').innerHTML = CATS.map(c => {
+      const n = c.id === 'all' ? APPS.length : APPS.filter(a => a.category === c.id).length;
+      if (c.id !== 'all' && !n) return '';
+      return `<button type="button" data-cat="${c.id}" aria-pressed="${state.cat === c.id}">${esc(c.label)}<span class="n">${n}</span></button>`;
+    }).join('');
+  }
+
+  function filtered() {
+    const q = state.q.trim().toLowerCase();
+    return APPS.filter(a => (state.cat === 'all' || a.category === state.cat) &&
+      (!q || [a.title, a.en, a.scripture, a.summary, a.era?.label, a.era?.year, a.testament, ...(a.points || [])].join(' ').toLowerCase().includes(q)));
+  }
+
+  function cardHTML(a) {
+    return `<button type="button" class="card ${isLive(a) ? 'live' : 'soon'}" data-id="${a.id}" aria-label="${esc(a.title)} 미리보기">
+      ${thumbHTML(a)}
+      <div class="cardBody">
+        <span class="era">${esc(a.era.label)} · ${esc(a.era.year)}</span>
+        <h3>${esc(a.title)}</h3>
+        <span class="en">${esc(a.en)}</span>
+        <span class="ref">${esc(a.scripture)}</span>
+        <div class="cardFoot"><span class="tag">${esc(catLabel(a.category))}</span><span class="go">미리보기 →</span></div>
+      </div>
+    </button>`;
+  }
+
+  function renderList() {
+    const list = filtered();
+    $('#count').textContent = `${list.length}곳`;
+    $('#listTitle').textContent = state.view === 'timeline' ? '시대의 흐름으로' : (state.cat === 'all' ? '모든 공간' : catLabel(state.cat));
+    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === state.view));
+    if (!list.length) { $('#view').innerHTML = `<div class="empty">찾는 공간이 아직 없습니다. 다른 낱말로 검색해 보세요.</div>`; return; }
+
+    if (state.view === 'grid') {
+      const live = list.filter(isLive), soon = list.filter(a => !isLive(a));
+      $('#view').innerHTML = `<div class="grid">${[...live, ...soon].map(cardHTML).join('')}
+        ${state.cat === 'all' && !state.q ? `<div class="addCard"><span class="plus">+</span><b>새로운 공간이 계속 더해집니다</b><span>다음 공간을 기다려 주세요</span></div>` : ''}</div>`;
+    } else {
+      const sorted = [...list].sort((a, b) => a.era.order - b.era.order);
+      let lastT = null;
+      $('#view').innerHTML = `<div class="timeline">${sorted.map(a => {
+        const t = a.testament.includes('·') ? '구약 · 신약을 아우르는' : a.testament;
+        const head = t !== lastT ? `<div class="tlTestament">${esc(t)}</div>` : '';
+        lastT = t;
+        return `${head}<div class="tlRow">
+          <div class="tlWhen"><b>${esc(a.era.label)}</b><span>${esc(a.era.year)}</span></div>
+          <div class="tlLine"><span class="tlDot ${isLive(a) ? 'live' : ''}"></span></div>
+          <button type="button" class="tlCard" data-id="${a.id}" aria-label="${esc(a.title)} 미리보기">
+            ${thumbHTML(a, { num: false })}
+            <div class="cardBody">
+              <span class="mWhen">${esc(a.era.label)} · ${esc(a.era.year)}</span>
+              <h3>${esc(a.title)}</h3>
+              <span class="ref">${esc(a.scripture)}</span>
+              <div class="cardFoot"><span class="tag">${esc(catLabel(a.category))}</span><span class="go">미리보기 →</span></div>
+            </div>
+          </button></div>`;
+      }).join('')}</div>`;
+    }
+  }
+
+  /* ---------- 미리보기 창 ---------- */
+  const drawer = $('#drawer'), scrim = $('#scrim'), stage = $('#stage');
+  let current = null, stopTeaser = null, lastFocus = null;
+  const wide = () => window.matchMedia('(min-width: 900px)').matches;
+
+  function order() { return filtered().length ? [...filtered().filter(isLive), ...filtered().filter(a => !isLive(a))] : APPS; }
+
+  function clearStage() {
+    if (stopTeaser) { stopTeaser(); stopTeaser = null; }
+    stage.innerHTML = '';
+  }
+
+  function loadLive(a) {
+    if (stage.querySelector('iframe')) return;
+    const fr = document.createElement('iframe');
+    fr.title = `${a.title} 실시간 미리보기`;
+    fr.setAttribute('allow', 'fullscreen; xr-spatial-tracking');
+    fr.loading = 'eager';
+    const ld = stage.querySelector('.loading'); ld && ld.classList.add('show');
+    fr.addEventListener('load', () => { fr.classList.add('ready'); ld && ld.classList.remove('show'); const pl = stage.querySelector('.stageBar .pill'); pl && (pl.style.visibility = 'hidden'); });
+    fr.src = a.url;
+    stage.insertBefore(fr, stage.querySelector('.stageBar'));
+    const b = $('#liveToggle'); b && b.setAttribute('aria-pressed', 'true');
+    b && (b.textContent = '정지 화면으로');
+  }
+  function unloadLive() {
+    const fr = stage.querySelector('iframe'); fr && fr.remove();
+    const ld = stage.querySelector('.loading'); ld && ld.classList.remove('show');
+    const pl = stage.querySelector('.stageBar .pill'); pl && (pl.style.visibility = '');
+    const b = $('#liveToggle'); b && b.setAttribute('aria-pressed', 'false');
+    b && (b.textContent = '실시간 미리보기');
+  }
+
+  function renderStage(a) {
+    clearStage();
+    if (isLive(a)) {
+      stage.innerHTML = `${a.thumb ? `<img src="${esc(a.thumb)}" alt="${esc(a.title)} 화면">` : ''}
+        <div class="loading">실제 화면을 불러오는 중…</div>
+        <div class="stageBar"><span class="pill">${wide() ? '화면 안에서 직접 돌려 볼 수 있습니다' : '눌러서 실제 화면 보기'}</span>
+        <button type="button" id="liveToggle" aria-pressed="false">실시간 미리보기</button></div>`;
+      $('#liveToggle').addEventListener('click', () => stage.querySelector('iframe') ? unloadLive() : loadLive(a));
+      if (wide()) setTimeout(() => { if (current === a) loadLive(a); }, 380);
+    } else if (a.teaser && window.Bible3DTeasers && window.Bible3DTeasers.has(a.teaser)) {
+      const host = document.createElement('div'); host.className = 'teaserHost'; stage.appendChild(host);
+      stage.insertAdjacentHTML('beforeend', `<div class="stageBar"><span class="pill">구상 스케치 · 드래그하여 돌려 보기</span><span class="pill">준비 중</span></div>`);
+      requestAnimationFrame(() => { if (current === a) stopTeaser = window.Bible3DTeasers.mount(a.teaser, host); });
+    } else {
+      stage.innerHTML = thumbHTML(a);
+    }
+  }
+
+  function renderDrawer(a) {
+    const list = order(); const idx = list.indexOf(a);
+    $('#dIndex').textContent = `${String(idx + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')} · ${catLabel(a.category)}`;
+    renderStage(a);
+    $('#dBody').innerHTML = `
+      <span class="era">${esc(a.era.label)} · ${esc(a.era.year)}</span>
+      <h2 id="dTitle">${esc(a.title)}</h2>
+      <span class="en">${esc(a.en)}</span>
+      <div class="tags"><span class="tag">${esc(a.testament)}</span><span class="tag">${esc(catLabel(a.category))}</span><span class="tag">${isLive(a) ? '지금 열림' : '준비 중'}</span></div>
+      <p class="sum">${esc(a.summary)}</p>
+      <div class="verse"><small>주요 성경 본문</small>${esc(a.scripture)}</div>
+      ${a.points?.length ? `<h4>${isLive(a) ? '둘러볼 장소' : '준비 중인 구성'}</h4>
+        <ul class="points">${a.points.map((p, i) => `<li><i>${String(i + 1).padStart(2, '0')}</i>${esc(p)}</li>`).join('')}</ul>` : ''}`;
+    $('#dFoot').innerHTML = isLive(a)
+      ? `<a class="primary" href="${esc(a.url)}">공간으로 들어가기 <span aria-hidden="true">→</span></a>
+         <button type="button" class="iconBtn" id="shareBtn">공유</button>`
+      : `<span class="primary" aria-disabled="true">준비 중입니다 · 곧 열립니다</span>`;
+    const sb = $('#shareBtn'); sb && sb.addEventListener('click', () => share(a));
+    $('.dScroll').scrollTop = 0;
+  }
+
+  function openPreview(id, push = true) {
+    const a = APPS.find(x => x.id === id); if (!a) return;
+    if (!drawer.classList.contains('open')) lastFocus = document.activeElement;
+    current = a;
+    renderDrawer(a);
+    drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('locked');
+    if (push && location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+    setTimeout(() => $('#dClose').focus({ preventScroll: true }), 50);
+  }
+  function closePreview() {
+    if (!drawer.classList.contains('open')) return;
+    drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('locked');
+    current = null;
+    setTimeout(() => { if (!current) clearStage(); }, 330);
+    history.replaceState(null, '', location.pathname + location.search);
+    lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
+  }
+  function step(d) {
+    if (!current) return;
+    const list = order(); const i = list.indexOf(current);
+    const n = list[(i + d + list.length) % list.length];
+    openPreview(n.id);
+  }
+
+  async function share(a) {
+    const data = { title: `3D로 보는 성경 · ${a.title}`, text: a.summary, url: a.url };
+    try {
+      if (navigator.share) { await navigator.share(data); return; }
+      await navigator.clipboard.writeText(a.url); toast('링크를 복사했습니다');
+    } catch (e) { if (e && e.name !== 'AbortError') toast(a.url); }
+  }
+  let tt; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => t.classList.remove('show'), 2200); }
+
+  /* ---------- 이벤트 ---------- */
+  document.addEventListener('click', (e) => {
+    const c = e.target.closest('[data-id]');
+    if (c && !drawer.contains(c)) { openPreview(c.dataset.id); return; }
+    const v = e.target.closest('[data-view]');
+    if (v) { state.view = v.dataset.view; try { localStorage.setItem('b3d.view', state.view); } catch (er) {} renderList(); return; }
+    const ct = e.target.closest('[data-cat]');
+    if (ct) { state.cat = ct.dataset.cat; renderChips(); renderList(); }
+  });
+  $('#featured').addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.id) { e.preventDefault(); openPreview(e.target.dataset.id); } });
+  $('#q').addEventListener('input', (e) => { state.q = e.target.value; renderList(); });
+  scrim.addEventListener('click', closePreview);
+  $('#dClose').addEventListener('click', closePreview);
+  $('#dPrev').addEventListener('click', () => step(-1));
+  $('#dNext').addEventListener('click', () => step(1));
+  document.addEventListener('keydown', (e) => {
+    if (!drawer.classList.contains('open')) return;
+    if (e.key === 'Escape') closePreview();
+    else if (e.key === 'ArrowLeft' && !e.target.matches('input')) step(-1);
+    else if (e.key === 'ArrowRight' && !e.target.matches('input')) step(1);
+    else if (e.key === 'Tab') { // 창 안에서만 포커스 이동
+      const f = [...drawer.querySelectorAll('button,a[href],[tabindex]:not([tabindex="-1"])')].filter(x => x.offsetParent);
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+  // 모바일: 아래로 끌어 닫기
+  (function () {
+    let y0 = null; const top = $('.dTop');
+    top.addEventListener('touchstart', (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+    top.addEventListener('touchend', (e) => { if (y0 != null && e.changedTouches[0].clientY - y0 > 70) closePreview(); y0 = null; });
+  })();
+  window.addEventListener('hashchange', () => { const id = location.hash.slice(1); id ? openPreview(id, false) : closePreview(); });
+
+  /* ---------- 앱으로 받기 ---------- */
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; });
+  $('#installBtn').addEventListener('click', async () => {
+    if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; return; }
+    if (window.matchMedia('(display-mode: standalone)').matches) { toast('이미 앱으로 설치되어 있습니다'); return; }
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    toast(ios ? '사파리 아래 공유 버튼 → ‘홈 화면에 추가’를 눌러 주세요' : '브라우저 메뉴에서 ‘앱 설치’ 또는 ‘홈 화면에 추가’를 눌러 주세요');
+  });
+  if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});
+
+  /* ---------- 시작 ---------- */
+  renderHero(); renderChips(); renderList();
+  const startId = location.hash.slice(1); if (startId) openPreview(startId, false);
+})();
+</script>
+</body>
+</html>
