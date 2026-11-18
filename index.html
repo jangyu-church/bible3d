@@ -302,7 +302,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 </section>
 <footer>
   <div class="wrap">
-    <span>3D로 보는 성경 · 장유중앙교회</span>
+    <span>3D로 보는 성경 · 장유중앙교회 · <a href="#admin" id="adminLink" style="color:inherit;opacity:.55;text-decoration:none">관리</a></span>
     <span>모형은 성경 본문과 연구를 바탕으로 한 교육용 복원이며, 세부는 해석에 따라 다를 수 있습니다.</span>
   </div>
 </footer>
@@ -329,9 +329,13 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="apps.js"></script>
 <script src="teasers.js"></script>
+<script type="module" src="firebase.js"></script>
 <script>
 (function(){
-  const APPS = (window.BIBLE3D_APPS || []).map((a, i) => Object.assign({ no: String(i + 1).padStart(2, '0') }, a));
+  const number = (list) => list.map((a, i) => Object.assign({}, a, { no: String(i + 1).padStart(2, '0') }));
+  // 처음엔 지난번에 받아 둔 목록(또는 apps.js)으로 바로 그리고, Firebase 목록이 오면 바꿔 그립니다.
+  let APPS = number(window.BIBLE3D_APPS || []);
+  try { const c = JSON.parse(localStorage.getItem('b3d.spaces') || 'null'); if (Array.isArray(c) && c.length) APPS = number(c); } catch (e) {}
   const CATS = window.BIBLE3D_CATEGORIES || [{ id: 'all', label: '전체' }];
   const catLabel = (id) => (CATS.find(c => c.id === id) || {}).label || '';
   const $ = (s, el = document) => el.querySelector(s);
@@ -572,7 +576,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
     top.addEventListener('touchstart', (e) => { y0 = e.touches[0].clientY; }, { passive: true });
     top.addEventListener('touchend', (e) => { if (y0 != null && e.changedTouches[0].clientY - y0 > 70) closePreview(); y0 = null; });
   })();
-  window.addEventListener('hashchange', () => { const id = location.hash.slice(1); id ? openPreview(id, false) : closePreview(); });
+  window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if (id === 'admin') return; id ? openPreview(id, false) : closePreview(); });
 
   /* ---------- 앱으로 받기 ---------- */
   let deferred = null;
@@ -587,7 +591,21 @@ footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
 
   /* ---------- 시작 ---------- */
   renderHero(); renderChips(); renderList();
-  const startId = location.hash.slice(1); if (startId) openPreview(startId, false);
+  const startId = location.hash.slice(1); if (startId && startId !== 'admin') openPreview(startId, false);
+
+  /* Firebase(firebase.js)에서 목록을 넘겨받는 통로 */
+  window.B3D = {
+    toast, CATS,
+    getApps: () => APPS,
+    setApps(list) {
+      if (!Array.isArray(list) || !list.length) return;
+      APPS = number(list);
+      try { localStorage.setItem('b3d.spaces', JSON.stringify(list)); } catch (e) {}
+      renderHero(); renderChips(); renderList();
+      if (current) { const again = APPS.find(x => x.id === current.id); again ? openPreview(again.id, false) : closePreview(); }
+      else { const id = location.hash.slice(1); if (id && id !== 'admin' && APPS.find(x => x.id === id)) openPreview(id, false); }
+    }
+  };
 })();
 </script>
 </body>

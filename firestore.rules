@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 운영자 메일 목록 — 운영자를 더하려면 이 목록에 메일을 추가하세요.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+             'saulabi007@gmail.com'
+           ];
+    }
+
+    // 공간 목록: 누구나 읽기, 운영자만 쓰기
+    match /spaces/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // 운영자 확인용 (앱이 이 문서를 읽어 보고 운영자인지 판단합니다)
+    match /adminCheck/{id} {
+      allow read: if isAdmin();
+    }
+  }
+}

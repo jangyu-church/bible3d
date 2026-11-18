@@ -16,21 +16,16 @@
 | `thumbs/` | 열린 공간의 썸네일 이미지 (16:10, 960×600 권장) |
 | `icons/`, `manifest.webmanifest`, `sw.js` | 앱으로 설치(PWA)용 |
 
-## 새 공간을 추가하는 법
+## 새 공간을 추가하는 법 (운영자 화면)
 
-1. 새 공간 앱을 지금처럼 별도 저장소로 만들어 배포합니다. (예: `jangyu-church/tabernacle`)
-2. 앱 화면을 캡처해 `thumbs/tabernacle.jpg` 로 넣습니다.
-3. `apps.js` 에서 해당 항목을 이렇게 바꿉니다.
+1. 사이트 맨 아래 **관리** 를 누르거나 주소 끝에 `#admin` 을 붙여 엽니다.
+2. 운영자 구글 계정으로 로그인합니다.
+3. **+ 새 공간 추가** → 제목·주소·사진 등을 넣고 **저장하기**. 성도들 화면에 바로 반영됩니다.
+4. 순서 바꾸기(↑↓), 준비 중 ↔ 열림 전환, 고치기, 삭제도 이 화면에서 합니다.
 
-```js
-status: 'live',                                         // 'soon' → 'live'
-url: 'https://jangyu-church.github.io/tabernacle/',
-thumb: 'thumbs/tabernacle.jpg',
-points: ['성막 뜰과 문', '번제단', ...],                // 둘러볼 장소
-```
-
-완전히 새로운 공간이라면 항목 하나를 통째로 복사해 붙여 넣고 `id`, `title`, `era.order`(시대순 위치) 등을 고치면 됩니다.
-분류를 새로 만들 때는 `BIBLE3D_CATEGORIES` 에 한 줄을 더합니다.
+- 공간 목록은 Firebase Firestore(`spaces` 컬렉션)에 저장됩니다. 사진은 960×600으로 줄여 함께 저장하므로 Storage(유료)가 필요 없습니다.
+- `apps.js` 는 처음 한 번 데이터베이스로 옮길 때와, 인터넷이 안 될 때 쓰는 예비 목록입니다.
+- 운영자 추가: Firebase 콘솔 → Firestore → **규칙** 에서 메일 목록에 한 줄 추가 (`firestore.rules` 참고).
 
 ## 배포 (GitHub Pages)
 
